@@ -592,12 +592,21 @@ def get_hashes():
 
 print(f"Welcome to: {GREEN}Fleasion!{DEFAULT}\n")
 start = True
+
 while True:
     if not start:
         print(" ")
     start = False
+
     menu = input(
-        f"Enter the number corresponding to what you'd like to do:\n1: {GREEN}Ingame asset replacements{DEFAULT}\n2: {GREEN}Presets{DEFAULT}\n3: {GREEN}Block (experimental, dont use){DEFAULT}\n4: {GREEN}Cache Settings{DEFAULT}\n5: {GREEN}Settings{DEFAULT}\n6: {GREEN}Exit{DEFAULT}\n: ")
+        "Enter the number corresponding to what you'd like to do:\n"
+        f"1: {GREEN}In-game asset replacements{DEFAULT}\n"
+        f"2: {GREEN}Presets{DEFAULT}\n"
+        f"3: {GREEN}Cache Settings{DEFAULT}\n"
+        f"4: {GREEN}Settings{DEFAULT}\n"
+        f"5: {GREEN}Exit{DEFAULT}\n:"
+    )
+
     if menu == '1':
         replacements = get_hashes()
         for replacement in replacements:
@@ -674,71 +683,6 @@ while True:
             print("Invalid option")
 
     elif menu == '3':
-        blockwarn = input(
-            f"\n{RED}Warning: This is highly experimental and volatile to causing errors, requiring run.bat to be ran as admin to use. Only continue if you are aware of what youre doing.\nType 'done' to proceed, anything else will cancel.\n{DEFAULT}")
-        if blockwarn == "done":
-            file_path = r"C:\Windows\System32\drivers\etc\hosts"
-            with open(file_path, "r") as file:
-                content = file.read()
-
-            blockedlist = []
-            unblockedlist = []
-
-            for i in range(8):
-                if f"#127.0.0.1 c{i}.rbxcdn.com" in content:
-                    unblockedlist.append(f"c{i}")
-                elif f"127.0.0.1 c{i}.rbxcdn.com" in content:
-                    blockedlist.append(f"c{i}")
-
-                if f"#127.0.0.1 t{i}.rbxcdn.com" in content:
-                    unblockedlist.append(f"t{i}")
-                elif f"127.0.0.1 t{i}.rbxcdn.com" in content:
-                    blockedlist.append(f"t{i}")
-
-            print("\nCurrently blocked:", " ".join(blockedlist))
-            print("Currently unblocked:", " ".join(unblockedlist))
-
-
-            def website_blocks():
-                website_blocklist = []
-                print("Enter c(num)/t(num) to block/unblock (type 'done' when finished)")
-                while True:
-                    website_name = input("Enter string: ")
-                    if website_name.lower() == 'done':
-                        break
-                    website_blocklist.append(website_name)
-                return website_blocklist
-
-
-            website_block = website_blocks()
-
-            try:
-                modified_content = content
-                for string_thing in website_block:
-                    if f"#127.0.0.1 {string_thing}.rbxcdn.com" in content:
-                        modified_content = modified_content.replace(f"#127.0.0.1 {string_thing}.rbxcdn.com",
-                                                                    f"127.0.0.1 {string_thing}.rbxcdn.com")
-                        print("Blocked!")
-                    elif f"127.0.0.1 {string_thing}.rbxcdn.com" in content:
-                        modified_content = modified_content.replace(f"127.0.0.1 {string_thing}.rbxcdn.com",
-                                                                    f"#127.0.0.1 {string_thing}.rbxcdn.com")
-                        print("Unblocked!")
-                    else:
-                        print("No text found, blocking it.")
-                        modified_content += f"\n127.0.0.1 {string_thing}.rbxcdn.com"
-
-            except Exception as e:
-                print(f"An error occurred: {e}")
-
-            try:
-                with open(file_path, "w") as file:
-                    file.write(modified_content)
-            except Exception as e:
-                print(f"{RED}An error occurred: {e}{DEFAULT}")
-        else:
-            pass
-
-    elif menu == '4':
         menu = input(
             f"\nEnter the number corresponding to what you'd like to do:\n1: {GREEN}Revert replacement{DEFAULT}\n2: {GREEN}Clear full cache{DEFAULT}\n: ")
         if menu == '1':
@@ -771,7 +715,7 @@ while True:
                 delete_all_in_directory(folder_path)
                 print("Cleared cache, rejoin relevant experiences")
 
-    elif menu == '5':
+    elif menu == '4':
         b_path = os.path.join(os.getenv('LOCALAPPDATA'), 'Bloxstrap', 'Modifications')
         Cset = ["ClientSettings", "ClientAppSettings.json"]
         settings_file_path = os.path.join(b_path, *Cset)
@@ -832,7 +776,7 @@ while True:
                 except Exception as e:
                     print(f"{RED}Error: {e}{DEFAULT}")
 
-    elif menu == '6':
+    elif menu == '5':
         print("\nExiting the program.")
         break
 
